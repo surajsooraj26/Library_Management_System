@@ -1,0 +1,40 @@
+.assign-book {
+  background-color: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 70vh;
+  padding: 20px;
+
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+.assign-button {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.close-btn {
+  background-color: #f8f9fa;
+  color: black;
+  border: rgb(253, 95, 95) 1px solid;
+}
+.close-btn:hover {
+  background-color: rgb(253, 95, 95);
+  color: #f8f9fa;
+}
+.bookid {
+  width: 20%;
+}
+label {
+  font-weight: bold;
+}
