@@ -50,7 +50,7 @@ Library-Management-System/
 
 <ol>
   <li>Clone this repo:
-    <pre><code>git clone https://github.com/surajsooraj26/library_Management_System.git
+    <pre><code>git clone git@github.com:surajsooraj26/Library_Management_System.git
 cd Library_Management_System/backend</code></pre>
   </li>
   <li>Install dependencies:
