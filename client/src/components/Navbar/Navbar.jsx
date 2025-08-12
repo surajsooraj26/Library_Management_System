@@ -1,7 +1,8 @@
 import "./Navbar.css";
-import api from "../services/api";
-import { useAuth } from "../context/AuthContext";
+import api from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "react-router-dom";
+import SearchInput from "../SearchInput/SearchInput";
 function Navbar() {
   const { user, setUser } = useAuth();
   const login = () => {
@@ -20,14 +21,13 @@ function Navbar() {
   return (
     <div className="nav-bar">
       <div className="left">
-        <img src="/vite.svg" alt="logo" />
-        <h1>Library</h1>
+        <img src="/logo.png" alt="logo" />
+        <img src="/title.png" className="title" alt="title" />
       </div>
       {isHomePage && (
         <div className="right">
-          <a href="">Home</a>
-          <a href="">About</a>
-          <a href="">Contact</a>
+          <SearchInput />
+
           <button onClick={login}>Login</button>
         </div>
       )}
