@@ -1,0 +1,39 @@
+.admin-dashboard {
+  padding-top: 1.5rem;
+  padding-bottom: 1.25rem;
+  padding-left: 10rem;
+  padding-right: 10rem;
+}
+
+.admin-dashboard .dashboard-content {
+  display: flex;
+  padding: 1rem 1rem 1rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.admin-dashboard .dashboard-content .box {
+  display: flex;
+  padding: 1.5rem;
+  flex-direction: column;
+  flex: 1 1 0%;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cedbe8;
+}
+.admin-dashboard .dashboard-content .box .box-title {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #0d141c;
+}
+.admin-dashboard .dashboard-content .box .box-value {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0d141c;
+}
+.admin-dashboard .recent-activity {
+  padding-top: 1.5rem;
+}

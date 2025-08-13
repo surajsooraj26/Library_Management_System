@@ -1,6 +1,6 @@
-import { useAuth } from "../context/AuthContext";
-import AdminDashboard from "./AdminDashboard";
-import MemberDashboard from "./MemberDashboard";
+import { useAuth } from "../../context/AuthContext";
+import AdminDashboard from "./Admin/AdminDashboard";
+import MemberDashboard from "./Member/MemberDashboard";
 
 function Dashboard() {
   const { user } = useAuth();

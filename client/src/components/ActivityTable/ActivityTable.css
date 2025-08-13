@@ -1,0 +1,71 @@
+.activity-table-container {
+  padding: 1rem 0rem;
+}
+
+.activity-table-wrapper {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #cedbe8;
+  border-radius: 0.5rem;
+  background-color: #f8fafc; /* slate-50 */
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+.activity-table thead tr {
+  border-bottom: 1px solid #cedbe8;
+}
+
+.activity-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0d141c;
+}
+
+.activity-table td {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #0d141c;
+}
+
+.activity-table td.action {
+  color: #49739c;
+}
+
+.activity-table td.timestamp {
+  color: #49739c;
+}
+
+.activity-table tr + tr {
+  border-top: 1px solid #cedbe8;
+}
+
+.activity-table td,
+.activity-table th {
+  width: 400px;
+}
+
+.activity-table td {
+  height: 50px;
+}
+.pagination {
+  padding-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.active {
+  background-color: #e7edf4;
+  border-radius: 0.5rem;
+}

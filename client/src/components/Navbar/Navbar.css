@@ -6,6 +6,10 @@
   margin-left: 0;
   border-bottom: 1px solid #f0f1f4;
 }
+.dimmed {
+  filter: brightness(0.4);
+  pointer-events: none;
+}
 
 .nav-bar .left {
   width: 20%;
@@ -23,6 +27,7 @@
   max-height: 100%;
   width: auto;
   display: block;
+  cursor: pointer;
 }
 
 .nav-bar .right {
@@ -35,9 +40,13 @@
 }
 
 .nav-bar .right a {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #0d141c;
   margin-left: 20px;
   text-decoration: none;
-  color: #343a40;
 }
 
 .nav-bar .right button {
@@ -55,7 +64,7 @@
 }
 
 .nav-bar .right button:hover {
-  background-color: #0056b3;
+  background-color: #49739c;
   transition: background-color 0.3s ease, transform 0.3s ease;
   transition-delay: 0.1s;
   color: white;
