@@ -8,9 +8,9 @@ const registerAdmin = async () => {
       const admin = {
         name: "Admin",
         email: "admin@gmail.com",
-        passowrd: "admin123",
+        password: "admin",
       };
-      const hashedPassword = await bcrypt.hash(admin.passowrd, 10);
+      const hashedPassword = await bcrypt.hash(admin.password, 10);
       const newAdmin = new User({
         name: admin.name,
         email: admin.email,
