@@ -36,9 +36,9 @@ function ActivityTable() {
   ];
 
   return (
-    <div className="activity-table-container">
-      <div className="activity-table-wrapper">
-        <table className="activity-table">
+    <div className="table-container">
+      <div className="table-wrapper">
+        <table className="table">
           <thead>
             <tr>
               <th>User</th>

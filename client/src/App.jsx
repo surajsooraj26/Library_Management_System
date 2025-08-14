@@ -6,7 +6,9 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { LoginProvider } from "./context/LoginContext.jsx";
 import { LogoutProvider } from "./context/LogoutContext.jsx";
 import Books from "./pages/Books/Books.jsx";
-
+import AdminUsers from "./pages/Users/AdminUsers.jsx";
+import ActivityLog from "./pages/ActivityLog/ActivityLog.jsx";
+import { CheckoutProvider } from "./context/CheckoutContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 function App() {
   return (
@@ -15,25 +17,44 @@ function App() {
         <LogoutProvider>
           <Navbar />
         </LogoutProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/books"
-            element={
-              <ProtectedRoute>
-                <Books />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+        <CheckoutProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/books"
+              element={
+                <ProtectedRoute>
+                  <Books />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute>
+                  <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/activitylog"
+              element={
+                <ProtectedRoute>
+                  <ActivityLog />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </CheckoutProvider>
       </LoginProvider>
     </AuthProvider>
   );

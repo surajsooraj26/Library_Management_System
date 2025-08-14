@@ -4,3 +4,15 @@
   justify-content: space-between;
   align-items: center;
 }
+.search-box.books {
+  margin-top: 1.25rem;
+  width: 100%;
+}
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 2.5rem;
+}
+.add-book {
+  margin-right: 0;
+}

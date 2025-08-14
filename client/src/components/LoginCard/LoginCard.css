@@ -28,7 +28,7 @@
   align-items: center;
   margin-bottom: 20px;
 }
-.btn.bold.border {
+.btn .border {
   border: #49739c 1px solid;
   margin: 0px;
 }

@@ -10,7 +10,8 @@
 }
 
 .logout-container button {
-  border: none;
+  margin-top: 1rem;
+  border: 1px solid #49739c;
   border-radius: 4px;
   cursor: pointer;
 }

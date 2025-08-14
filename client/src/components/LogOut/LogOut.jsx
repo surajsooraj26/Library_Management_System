@@ -17,8 +17,10 @@ function LogOut({ onClose }) {
   return (
     <div className="logout-container">
       <h2>Are you sure you want to log out?</h2>
-      <button onClick={Logout}>Yes, Log Out</button>
-      <button className="cancel-button" onClick={onClose}>
+      <button className="btn border" onClick={Logout}>
+        Yes, Log Out
+      </button>
+      <button className="btn border cancel-button" onClick={onClose}>
         No, Go Back
       </button>
     </div>

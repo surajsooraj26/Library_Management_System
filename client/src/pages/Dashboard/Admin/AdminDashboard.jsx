@@ -2,8 +2,10 @@ import "./AdminDashboard.css";
 import UserRegistration from "../../../components/UserRegistration.jsx";
 import { useState } from "react";
 import ActivityTable from "../../../components/ActivityTable/ActivityTable.jsx";
-
+import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm.jsx";
+import { useCheckout } from "../../../context/CheckoutContext.jsx";
 function AdminDashboard() {
+  const { showCheckoutForm, setShowCheckoutForm } = useCheckout();
   return (
     <div className="desktop-container">
       <h2>Dashboard</h2>
@@ -22,9 +24,15 @@ function AdminDashboard() {
         </div>
       </div>
       <div className="recent-activity">
-        <h2>Recent Activity Logs</h2>
+        <div className="head">
+          <h2>Recent Activity Logs</h2>
+          <button className="btn" onClick={() => setShowCheckoutForm(true)}>
+            Check Out
+          </button>
+        </div>
         <ActivityTable />
       </div>
+      {showCheckoutForm && <CheckoutForm />}
     </div>
   );
 }

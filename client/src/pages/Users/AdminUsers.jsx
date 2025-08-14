@@ -1,80 +1,74 @@
-import "./AdminBooks.css";
-import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-function AdminBooks() {
-  const [bookPage, setBookPage] = useState(1);
+import { useState } from "react";
+import "./AdminUsers.css";
+function AdminUsers() {
+  const [userPage, setUserPage] = useState(1);
   const windowSize = 5;
-  const start = Math.max(1, bookPage - windowSize + 1);
+  const start = Math.max(1, userPage - windowSize + 1);
 
-  const books = [
+  const users = [
     {
-      slno: 1,
-      title: "The Silent Observer",
-      author: "Ethan Walker",
-      genre: "Mystery",
+      name: "John Doe",
+      email: "john@example.com",
+      role: "Admin",
     },
     {
-      slno: 2,
-      title: "Whispers in the Wind",
-      author: "Olivia Hayes",
-      genre: "Romance",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      role: "Member",
     },
     {
-      slno: 3,
-      title: "Echoes of the Past",
-      author: "Caleb Bennett",
-      genre: "Historical Fiction",
+      name: "Caleb Bennett",
+      email: "caleb@example.com",
+      role: "Member",
     },
     {
-      slno: 4,
-      title: "The Hidden Truth",
-      author: "Ava Thorne",
-      genre: "Thriller",
+      name: "Ava Thorne",
+      email: "ava@example.com",
+      role: "Member",
     },
     {
-      slno: 5,
-      title: "The Silent Observer",
-      author: "Ethan Walker",
-      genre: "Mystery",
+      name: "Ethan Walker",
+      email: "ethan@example.com",
+      role: "Member",
     },
   ];
+
   return (
     <div className="desktop-container">
       <div className="head">
-        <h2>Books</h2>
-        <button className="btn add-book">Add Book</button>
+        <h2>Users</h2>
+        <button className="btn">Add User</button>
       </div>
       <form action="">
         <div className="search-box books">
           <FiSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search for books"
+            placeholder="Search Users"
             className="search-input books-input"
           />
         </div>
       </form>
       <div className="table-container">
         <div className="table-wrapper">
-          <table className="table .books-table">
+          <table className="table">
             <thead>
               <tr>
-                <th>SL No</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Genre</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {books.map((book, index) => (
+              {users.map((user, index) => (
                 <tr key={index}>
-                  <td className="title">{book.slno}</td>
-                  <td className="">{book.title}</td>
-                  <td className="timestamp">{book.author}</td>
-                  <td className="timestamp">{book.genre}</td>
+                  <td className="">{user.name}</td>
+                  <td className="timestamp">{user.email}</td>
+                  <td className="timestamp">{user.role}</td>
                   <td className="timestamp">
-                    <a>Edit</a>|<a>Delete</a>
+                    <a>View Details</a>|<a>Edit</a>|<a>Delete</a>
                   </td>
                 </tr>
               ))}
@@ -98,9 +92,9 @@ function AdminBooks() {
                 key={pageNum}
                 onClick={(e) => {
                   e.preventDefault();
-                  setBookPage(pageNum);
+                  setUserPage(pageNum);
                 }}
-                className={bookPage === pageNum ? "active" : ""}
+                className={userPage === pageNum ? "active" : ""}
               >
                 {pageNum}
               </a>
@@ -120,4 +114,4 @@ function AdminBooks() {
     </div>
   );
 }
-export default AdminBooks;
+export default AdminUsers;
