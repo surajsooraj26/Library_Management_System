@@ -4,6 +4,9 @@ import { useState } from "react";
 
 function ActivityTable() {
   const [activityPage, setActivityPage] = useState(1);
+  const windowSize = 5;
+  const start = Math.max(1, activityPage - windowSize + 1);
+
   const activities = [
     {
       user: "Ethan Walker",
@@ -54,22 +57,21 @@ function ActivityTable() {
           </tbody>
         </table>
       </div>
-      <div class="pagination">
+      <div className="pagination">
         <a
-          href="#"
           onClick={(e) => {
             e.preventDefault();
-            if (activityPage > 1) setActivityPage(activityPage - 1);
+            setActivityPage((p) => Math.max(1, p - 1));
           }}
         >
           &laquo;
         </a>
-        {[...Array(5)].map((_, i) => {
-          const pageNum = activityPage + i; // start from activityPage
+
+        {[...Array(windowSize)].map((_, i) => {
+          const pageNum = start + i;
           return (
             <a
-              href="#"
-              key={i}
+              key={pageNum}
               onClick={(e) => {
                 e.preventDefault();
                 setActivityPage(pageNum);
@@ -82,10 +84,9 @@ function ActivityTable() {
         })}
 
         <a
-          href="#"
           onClick={(e) => {
             e.preventDefault();
-            setActivityPage(activityPage + 1);
+            setActivityPage((p) => p + 1);
           }}
         >
           &raquo;

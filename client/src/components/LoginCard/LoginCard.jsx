@@ -61,7 +61,9 @@ function LoginCard({ onClose }) {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Login</button>
+        <button className="btn bold border" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );

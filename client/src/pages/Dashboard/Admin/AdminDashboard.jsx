@@ -5,7 +5,7 @@ import ActivityTable from "../../../components/ActivityTable/ActivityTable.jsx";
 
 function AdminDashboard() {
   return (
-    <div className="admin-dashboard">
+    <div className="desktop-container">
       <h2>Dashboard</h2>
       <div className="dashboard-content">
         <div className="box">

@@ -3,7 +3,7 @@ import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import SearchInput from "../SearchInput/SearchInput";
+import { FaSearch } from "react-icons/fa";
 import LoginCard from "../LoginCard/LoginCard.jsx";
 import { useLogin } from "../../context/LoginContext.jsx";
 import LogOut from "../LogOut/LogOut.jsx";
@@ -43,9 +43,20 @@ function Navbar() {
         </div>
         {isHomePage && (
           <div className="right">
-            <SearchInput />
+            <form action="">
+              <div className="search-box">
+                <FaSearch className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="search-input"
+                />
+              </div>
+            </form>
 
-            <button onClick={loginform}>Login</button>
+            <button className="btn bold" onClick={loginform}>
+              Login
+            </button>
           </div>
         )}
         {!isHomePage && user && user.role === "admin" && (
@@ -55,7 +66,9 @@ function Navbar() {
             <a href="/users">Users</a>
             <a href="/activity">Activity Logs</a>
             <a href="/settings">Settings</a>
-            <button onClick={() => setShowLogout(true)}>Logout</button>
+            <button className="btn bold" onClick={() => setShowLogout(true)}>
+              Logout
+            </button>
           </div>
         )}
       </div>
