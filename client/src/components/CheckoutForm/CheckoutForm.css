@@ -18,3 +18,38 @@
   color: #000000;
   font-size: 1.5rem;
 }
+.checkout-form .form-group {
+  margin-top: 15px;
+}
+.btn.border {
+  border: 1px solid #000000;
+  margin-left: 0;
+}
+.checkout {
+  display: flex;
+}
+.checkout-1 {
+  flex: 1;
+  padding: 20px;
+  width: 50%;
+}
+.checkout-2 {
+  flex: 1;
+  width: 50%;
+  background-color: #f0f4f8;
+  border-left: 1px solid #ccc;
+}
+.option {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.option input {
+  width: 100%;
+}
+.option select {
+  border-radius: 4px;
+  width: 70px;
+  border: 1px solid #ccc;
+  background-color: #e7edf4;
+}
