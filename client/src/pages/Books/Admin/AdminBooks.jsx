@@ -1,10 +1,13 @@
 import "./AdminBooks.css";
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import AddBookForm from "../../../components/AddBookForm/AddBookForm";
+import { useAddBook } from "../../../context/AddBookContext.jsx";
 function AdminBooks() {
   const [bookPage, setBookPage] = useState(1);
   const windowSize = 5;
   const start = Math.max(1, bookPage - windowSize + 1);
+  const { showAddBookForm, setShowAddBookForm } = useAddBook();
 
   const books = [
     {
@@ -40,9 +43,15 @@ function AdminBooks() {
   ];
   return (
     <div className="desktop-container">
+      {showAddBookForm && <AddBookForm />}
       <div className="head">
         <h2>Books</h2>
-        <button className="btn add-book">Add Book</button>
+        <button
+          className="btn add-book"
+          onClick={() => setShowAddBookForm((prev) => !prev)}
+        >
+          Add Book
+        </button>
       </div>
       <form action="">
         <div className="search-box books">

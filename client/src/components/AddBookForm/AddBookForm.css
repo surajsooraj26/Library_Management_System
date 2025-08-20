@@ -1,0 +1,17 @@
+.addbook {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.addbook-1,
+.addbook-2 {
+  width: 50%;
+}
+.addbook-1 {
+  background-color: aqua;
+}
+.shelf {
+  display: flex;
+  flex-direction: row;
+}
