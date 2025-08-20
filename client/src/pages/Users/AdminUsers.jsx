@@ -1,10 +1,13 @@
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import "./AdminUsers.css";
+import { useAddUser } from "../../context/AddUserContext";
+import AddUserForm from "../../components/AddUserForm/AddUserForm.jsx";
 function AdminUsers() {
   const [userPage, setUserPage] = useState(1);
   const windowSize = 5;
   const start = Math.max(1, userPage - windowSize + 1);
+  const { showAddUserForm, setShowAddUserForm } = useAddUser();
 
   const users = [
     {
@@ -36,9 +39,12 @@ function AdminUsers() {
 
   return (
     <div className="desktop-container">
+      {showAddUserForm && <AddUserForm />}
       <div className="head">
         <h2>Users</h2>
-        <button className="btn">Add User</button>
+        <button className="btn" onClick={() => setShowAddUserForm(true)}>
+          Add User
+        </button>
       </div>
       <form action="">
         <div className="search-box books">

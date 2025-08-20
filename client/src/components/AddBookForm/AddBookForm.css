@@ -8,10 +8,3 @@
 .addbook-2 {
   width: 50%;
 }
-.addbook-1 {
-  background-color: aqua;
-}
-.shelf {
-  display: flex;
-  flex-direction: row;
-}

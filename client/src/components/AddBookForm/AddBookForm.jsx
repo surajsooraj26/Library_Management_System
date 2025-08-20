@@ -36,6 +36,10 @@ function AddBookForm() {
               <label htmlFor="price">Price</label>
               <input type="number" id="price" name="price" required />
             </div>
+            <div className="form-group">
+              <label htmlFor="cover">Cover</label>
+              <input type="file" id="cover" name="cover" required />
+            </div>
           </div>
           <div className="addbook-2">
             <div className="form-group">
@@ -50,13 +54,13 @@ function AddBookForm() {
               <label htmlFor="edition">Edition</label>
               <input type="text" id="edition" name="edition" required />
             </div>
-            <div className="form-group shelf">
+            <div className="form-group">
               <label htmlFor="shelf">Shelf</label>
               <input type="text" id="shelf" name="shelf" required />
-              <button type="submit" className="btn submit-btn">
-                Add Book
-              </button>
             </div>
+            <button type="submit" className="btn submit-btn">
+              Add Book
+            </button>
           </div>
         </div>
       </form>

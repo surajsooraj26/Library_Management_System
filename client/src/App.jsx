@@ -11,6 +11,7 @@ import ActivityLog from "./pages/ActivityLog/ActivityLog.jsx";
 import { CheckoutProvider } from "./context/CheckoutContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { AddBookProvider } from "./context/AddBookContext.jsx";
+import { AddUserProvider } from "./context/AddUserContext.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -43,7 +44,9 @@ function App() {
               path="/users"
               element={
                 <ProtectedRoute>
-                  <AdminUsers />
+                  <AddUserProvider>
+                    <AdminUsers />
+                  </AddUserProvider>
                 </ProtectedRoute>
               }
             />
