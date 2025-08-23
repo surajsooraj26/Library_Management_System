@@ -6,8 +6,9 @@ const registerUser = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ message: "Please fill all fields" });
   }
-  const { name, email, password, role } = req.body;
-  if (!name || !email || !password) {
+  const { name, email, dob, address, phone, profilePicture, blood, role } =
+    req.body;
+  if (!name || !email || !dob || !role || !address || !phone || !blood) {
     return res.status(400).json({ message: "Please fill all fields" });
   }
   try {
@@ -15,10 +16,21 @@ const registerUser = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     } else {
+      const dateObj = new Date(dob);
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const year = dateObj.getFullYear();
+      const password = `${day}/${month}/${year}`;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = new User({
         name: name,
         email: email,
+        dob: dob,
+        address: address,
+        phone: phone,
+        profilePicture:
+          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        blood: blood,
         password: hashedPassword,
         role: role === "admin" ? "admin" : "member", // Default to members if not admin
       });
