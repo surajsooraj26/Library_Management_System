@@ -1,41 +1,33 @@
 import { FiSearch } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "../../services/api";
 import "./AdminUsers.css";
 import { useAddUser } from "../../context/AddUserContext";
 import AddUserForm from "../../components/AddUserForm/AddUserForm.jsx";
+
 function AdminUsers() {
   const [userPage, setUserPage] = useState(1);
-  const windowSize = 5;
-  const start = Math.max(1, userPage - windowSize + 1);
+  const usersPerPage = 5;
   const { showAddUserForm, setShowAddUserForm } = useAddUser();
+  // Sample user data
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get("/user", { withCredentials: true });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
-  const users = [
-    {
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-    },
-    {
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "Member",
-    },
-    {
-      name: "Caleb Bennett",
-      email: "caleb@example.com",
-      role: "Member",
-    },
-    {
-      name: "Ava Thorne",
-      email: "ava@example.com",
-      role: "Member",
-    },
-    {
-      name: "Ethan Walker",
-      email: "ethan@example.com",
-      role: "Member",
-    },
-  ];
+  // pagination calculations
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const startIndex = (userPage - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
+  const currentUsers = users.slice(startIndex, endIndex);
 
   return (
     <div className="desktop-container">
@@ -61,6 +53,7 @@ function AdminUsers() {
           <table className="table">
             <thead>
               <tr>
+                <th>SL No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -68,31 +61,34 @@ function AdminUsers() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {currentUsers.map((user, index) => (
                 <tr key={index}>
-                  <td className="">{user.name}</td>
+                  <td>{startIndex + index + 1}</td>
+                  <td>{user.name}</td>
                   <td className="timestamp">{user.email}</td>
                   <td className="timestamp">{user.role}</td>
                   <td className="timestamp">
-                    <a>View Details</a>|<a>Edit</a>|<a>Delete</a>
+                    <a>View Details</a> | <a>Edit</a> | <a>Delete</a>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
         <div className="pagination">
           <a
             onClick={(e) => {
               e.preventDefault();
-              setBookPage((p) => Math.max(1, p - 1));
+              setUserPage((p) => Math.max(1, p - 1));
             }}
           >
             &laquo;
           </a>
 
-          {[...Array(windowSize)].map((_, i) => {
-            const pageNum = start + i;
+          {[...Array(totalPages)].map((_, i) => {
+            const pageNum = i + 1;
             return (
               <a
                 key={pageNum}
@@ -110,7 +106,7 @@ function AdminUsers() {
           <a
             onClick={(e) => {
               e.preventDefault();
-              setBookPage((p) => p + 1);
+              setUserPage((p) => Math.min(totalPages, p + 1));
             }}
           >
             &raquo;

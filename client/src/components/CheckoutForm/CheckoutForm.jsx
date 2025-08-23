@@ -2,18 +2,13 @@ import "./CheckoutForm.css";
 import { IoClose } from "react-icons/io5";
 import { useCheckout } from "../../context/CheckoutContext.jsx";
 import { useState, useEffect } from "react";
+import api from "../../services/api.js";
 function CheckoutForm() {
   const { setShowCheckoutForm } = useCheckout();
   const [isChecked, setIsChecked] = useState(true);
   const [timestamp, setTimestamp] = useState("");
-  const book = {
-    id: "1357",
-    cover:
-      "https://dcbookstore.com/uploads/product/images/32440922957418-visma.JPG",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Fiction",
-  };
+  const [bookid, setBookId] = useState("");
+  const [book, setBook] = useState(null);
   const user = {
     id: "1234",
     profile:
@@ -63,6 +58,19 @@ function CheckoutForm() {
       setTimestamp(""); // optional: clear on uncheck
     }
   };
+
+  const searchBook = async () => {
+    const res = await api.get("/books", {
+      params: { bookid }, // or { title, author, category }
+    });
+
+    if (res.data.length > 0) {
+      setBook(res.data[0]); // if you want a list
+    } else {
+      setBook(null);
+    }
+  };
+
   return (
     <div className="add-form">
       <form>
@@ -80,11 +88,20 @@ function CheckoutForm() {
               <div className="option">
                 <select>
                   <option value="BookId">ID</option>
-                  <option value="BookTitle">Title</option>
-                  <option value="BookAuthor">Author</option>
-                  <option value="BookGenre">Genre</option>
+                  <option value="title">Title</option>
+                  <option value="author">Author</option>
+                  <option value="category">Category</option>
                 </select>
-                <input type="text" id="book" name="book" required />
+                <input
+                  type="text"
+                  id="book"
+                  onChange={(e) => setBookId(e.target.value)}
+                  name="book"
+                  required
+                />
+                <button type="button" className="btn" onClick={searchBook}>
+                  Search
+                </button>
               </div>
             </div>
             <div className="form-group">
@@ -124,13 +141,26 @@ function CheckoutForm() {
           <div className="checkout-2">
             <div className="book">
               <div className="book-1">
-                <img src={book.cover} alt="cover" />
+                <img
+                  src={
+                    book !== null
+                      ? book.coverImage
+                      : "https://i.pinimg.com/736x/bf/f0/4d/bff04d61ca0da85861456f44048a14c8.jpg"
+                  }
+                  alt="cover"
+                />
               </div>
               <div className="book-2">
-                <h3>{book.title}</h3>
-                <p className="book-id">{book.id}</p>
-                <p className="author">{book.author}</p>
-                <p className="genre">{book.genre}</p>
+                <h3>{book !== null ? book.title : "No Data"}</h3>
+                <p className="book-id">
+                  {book !== null ? book.bookid : "No Data"}
+                </p>
+                <p className="author">
+                  {book !== null ? book.author : "No Data"}
+                </p>
+                <p className="genre">
+                  {book !== null ? book.genre : "No Data"}
+                </p>
               </div>
             </div>
             <div className="user">

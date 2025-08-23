@@ -1,46 +1,33 @@
 import "./AdminBooks.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import AddBookForm from "../../../components/AddBookForm/AddBookForm";
 import { useAddBook } from "../../../context/AddBookContext.jsx";
+import api from "../../../services/api";
+
 function AdminBooks() {
   const [bookPage, setBookPage] = useState(1);
-  const windowSize = 5;
-  const start = Math.max(1, bookPage - windowSize + 1);
+  const booksPerPage = 5;
   const { showAddBookForm, setShowAddBookForm } = useAddBook();
+  // Sample book data
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await api.get("/books", { withCredentials: true });
+        setBooks(response.data);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+    fetchBooks();
+  }, []);
+  // pagination calculation
+  const totalPages = Math.ceil(books.length / booksPerPage);
+  const startIndex = (bookPage - 1) * booksPerPage;
+  const endIndex = startIndex + booksPerPage;
+  const currentBooks = books.slice(startIndex, endIndex);
 
-  const books = [
-    {
-      slno: 1,
-      title: "The Silent Observer",
-      author: "Ethan Walker",
-      genre: "Mystery",
-    },
-    {
-      slno: 2,
-      title: "Whispers in the Wind",
-      author: "Olivia Hayes",
-      genre: "Romance",
-    },
-    {
-      slno: 3,
-      title: "Echoes of the Past",
-      author: "Caleb Bennett",
-      genre: "Historical Fiction",
-    },
-    {
-      slno: 4,
-      title: "The Hidden Truth",
-      author: "Ava Thorne",
-      genre: "Thriller",
-    },
-    {
-      slno: 5,
-      title: "The Silent Observer",
-      author: "Ethan Walker",
-      genre: "Mystery",
-    },
-  ];
   return (
     <div className="desktop-container">
       {showAddBookForm && <AddBookForm />}
@@ -53,6 +40,7 @@ function AdminBooks() {
           Add Book
         </button>
       </div>
+
       <form action="">
         <div className="search-box books">
           <FiSearch className="search-icon" />
@@ -63,12 +51,13 @@ function AdminBooks() {
           />
         </div>
       </form>
+
       <div className="table-container">
         <div className="table-wrapper">
-          <table className="table .books-table">
+          <table className="table books-table">
             <thead>
               <tr>
-                <th>SL No</th>
+                <th>Id</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Genre</th>
@@ -76,20 +65,22 @@ function AdminBooks() {
               </tr>
             </thead>
             <tbody>
-              {books.map((book, index) => (
+              {currentBooks.map((book, index) => (
                 <tr key={index}>
-                  <td className="title">{book.slno}</td>
-                  <td className="">{book.title}</td>
+                  <td className="title">{book.bookid}</td>
+                  <td>{book.title}</td>
                   <td className="timestamp">{book.author}</td>
                   <td className="timestamp">{book.genre}</td>
                   <td className="timestamp">
-                    <a>Edit</a>|<a>Delete</a>
+                    <a>Edit</a> | <a>Delete</a>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
         <div className="pagination">
           <a
             onClick={(e) => {
@@ -100,8 +91,8 @@ function AdminBooks() {
             &laquo;
           </a>
 
-          {[...Array(windowSize)].map((_, i) => {
-            const pageNum = start + i;
+          {[...Array(totalPages)].map((_, i) => {
+            const pageNum = i + 1;
             return (
               <a
                 key={pageNum}
@@ -119,7 +110,7 @@ function AdminBooks() {
           <a
             onClick={(e) => {
               e.preventDefault();
-              setBookPage((p) => p + 1);
+              setBookPage((p) => Math.min(totalPages, p + 1));
             }}
           >
             &raquo;
@@ -129,4 +120,5 @@ function AdminBooks() {
     </div>
   );
 }
+
 export default AdminBooks;

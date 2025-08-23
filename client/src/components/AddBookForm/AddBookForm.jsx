@@ -1,6 +1,7 @@
 import "./AddBookForm.css";
 import { IoClose } from "react-icons/io5";
 import { useAddBook } from "../../context/AddBookContext";
+import api from "../../services/api";
 function AddBookForm() {
   const { setShowAddBookForm } = useAddBook();
   return (
@@ -15,6 +16,10 @@ function AddBookForm() {
       <form>
         <div className="addbook">
           <div className="addbook-1">
+            <div className="form-group">
+              <label htmlFor="id">Id</label>
+              <input type="number" id="id" name="id" required />
+            </div>
             <div className="form-group">
               <label htmlFor="title">Title</label>
               <input type="text" id="title" name="title" required />
@@ -36,12 +41,12 @@ function AddBookForm() {
               <label htmlFor="price">Price</label>
               <input type="number" id="price" name="price" required />
             </div>
+          </div>
+          <div className="addbook-2">
             <div className="form-group">
               <label htmlFor="cover">Cover</label>
               <input type="file" id="cover" name="cover" required />
             </div>
-          </div>
-          <div className="addbook-2">
             <div className="form-group">
               <label htmlFor="language">Language</label>
               <input type="text" id="language" name="language" required />

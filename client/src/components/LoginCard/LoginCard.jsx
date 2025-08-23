@@ -36,6 +36,7 @@ function LoginCard({ onClose }) {
           size={24}
           style={{ cursor: "pointer" }}
           onClick={onClose}
+          className="icon-close"
         />{" "}
       </div>
       <form onSubmit={handleSubmit}>

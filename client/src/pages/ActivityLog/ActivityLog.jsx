@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useCheckout } from "../../context/CheckoutContext";
+import CheckoutForm from "../../components/CheckoutForm/CheckoutForm.jsx";
 function ActivityLog() {
   const [activityPage, setActivityPage] = useState(1);
+  const { showCheckoutForm, setShowCheckoutForm } = useCheckout();
   const windowSize = 5;
   const start = Math.max(1, activityPage - windowSize + 1);
 
@@ -33,9 +36,12 @@ function ActivityLog() {
   ];
   return (
     <div className="desktop-container">
+      {showCheckoutForm && <CheckoutForm />}
       <div className="head">
         <h2>Activity Logs</h2>
-        <button className="btn">Check Out</button>
+        <button className="btn" onClick={() => setShowCheckoutForm(true)}>
+          Check Out
+        </button>
       </div>
 
       <div className="table-container">

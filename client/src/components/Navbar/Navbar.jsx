@@ -71,6 +71,15 @@ function Navbar() {
             </button>
           </div>
         )}
+
+        {!isHomePage && user && user.role !== "admin" && (
+          <div className="right">
+            <a href="/settings">Settings</a>
+            <button className="btn bold" onClick={() => setShowLogout(true)}>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
       {showLogin && <LoginCard onClose={() => setShowLogin(false)} />}
       {showLogout && <LogOut onClose={() => setShowLogout(false)} />}

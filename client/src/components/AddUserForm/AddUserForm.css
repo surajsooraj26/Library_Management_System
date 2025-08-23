@@ -1,0 +1,9 @@
+.adduser {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.adduser-1,
+.adduser-2 {
+  width: 50%;
+}
