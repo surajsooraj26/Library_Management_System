@@ -6,8 +6,11 @@ import api from "../../services/api.js";
 function CheckoutForm() {
   const { setShowCheckoutForm } = useCheckout();
   const [isChecked, setIsChecked] = useState(true);
+  const [searchField, setSearchField] = useState("bookid");
   const [timestamp, setTimestamp] = useState("");
-  const [bookid, setBookId] = useState("");
+  const [bookresult, setBookResult] = useState([]);
+  const [bookquery, setBookQuery] = useState("");
+
   const [book, setBook] = useState(null);
   const user = {
     id: "1234",
@@ -59,17 +62,25 @@ function CheckoutForm() {
     }
   };
 
-  const searchBook = async () => {
-    const res = await api.get("/books", {
-      params: { bookid }, // or { title, author, category }
-    });
-
-    if (res.data.length > 0) {
-      setBook(res.data[0]); // if you want a list
-    } else {
-      setBook(null);
+  useEffect(() => {
+    if (bookquery.trim() === "") {
+      setBookResult([]);
+      return;
     }
-  };
+
+    const fetchData = async () => {
+      try {
+        const res = await api.get("/books", {
+          params: { [searchField]: bookquery }, // dynamic key
+        });
+        setBookResult(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [bookquery, searchField]);
 
   return (
     <div className="add-form">
@@ -86,8 +97,11 @@ function CheckoutForm() {
             <div className="form-group">
               <label htmlFor="book">Book</label>
               <div className="option">
-                <select>
-                  <option value="BookId">ID</option>
+                <select
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value)}
+                >
+                  <option value="bookid">ID</option>
                   <option value="title">Title</option>
                   <option value="author">Author</option>
                   <option value="category">Category</option>
@@ -95,22 +109,52 @@ function CheckoutForm() {
                 <input
                   type="text"
                   id="book"
-                  onChange={(e) => setBookId(e.target.value)}
+                  onChange={(e) => setBookQuery(e.target.value)}
                   name="book"
                   required
                 />
-                <button type="button" className="btn" onClick={searchBook}>
-                  Search
-                </button>
               </div>
             </div>
+            {bookquery !== "" && (
+              <div
+                style={{
+                  position: "fixed",
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                  border: "1px solid #ccc",
+                  marginTop: "10px",
+                  padding: "5px",
+                  width: "40%",
+                  backgroundColor: "white",
+                }}
+              >
+                {bookresult.length > 0
+                  ? bookresult.map((book) => (
+                      <div
+                        key={book._id}
+                        style={{
+                          padding: "5px",
+                          borderBottom: "1px solid #eee",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setBook(book);
+                          setBookQuery("");
+                        }} // click to set value
+                      >
+                        {book.title} — {book.author}
+                      </div>
+                    ))
+                  : bookquery && <div>No results found</div>}
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="user">User</label>
               <div className="option">
                 <select>
-                  <option value="UserId">ID</option>
-                  <option value="UserName">Name</option>
                   <option value="UserEmail">Email</option>
+                  <option value="UserName">Name</option>
                 </select>
                 <input type="text" id="user" name="user" required />
               </div>
