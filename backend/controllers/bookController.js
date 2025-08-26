@@ -72,11 +72,15 @@ const deleteBook = async (req, res) => {
 
 // Issue a book
 const issueBook = async (req, res) => {
-  if (!req.body || !req.body.bookid || !req.body.userid) {
+  if (
+    !req.body ||
+    !req.body.bookid ||
+    !req.body.userid ||
+    !req.body.issuedDate
+  ) {
     return res.status(400).json({ error: "Book ID and User ID are required" });
   }
-  const { bookid, userid } = req.body;
-
+  const { bookid, userid, issuedDate } = req.body;
   try {
     const bookToIssue = await book.findOne({ bookid: bookid });
     if (!bookToIssue) {
@@ -88,9 +92,15 @@ const issueBook = async (req, res) => {
     bookToIssue.status = "checked out"; // Update status to checked out
     await bookToIssue.save();
     // Create an issue record
+    const issueDateObj = new Date(issuedDate);
+    const dueDateObj = new Date(issueDateObj);
+    dueDateObj.setDate(issueDateObj.getDate() + 15); // add 15 days
+
     const issueRecord = new issuedBook({
       user: userid,
       bookid: bookid,
+      issuedDate: issueDateObj,
+      dueDate: dueDateObj,
     });
     await issueRecord.save();
     res

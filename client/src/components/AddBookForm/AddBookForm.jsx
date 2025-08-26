@@ -63,9 +63,11 @@ function AddBookForm() {
               <label htmlFor="shelf">Shelf</label>
               <input type="text" id="shelf" name="shelf" required />
             </div>
-            <button type="submit" className="btn submit-btn">
-              Add Book
-            </button>
+            <div className="checkout-btn">
+              <button type="submit" className="btn border">
+                Add Book
+              </button>
+            </div>
           </div>
         </div>
       </form>

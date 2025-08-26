@@ -72,15 +72,19 @@ const userLogin = async (req, res) => {
   res.json({ message: "Logged in successfully" });
 };
 //get users
-
 const getUser = async (req, res) => {
   const { email, name } = req.query;
   const filter = {};
-  if (email) filter.email = email;
-  if (name) filter.name = name;
+
+  if (email) {
+    filter.email = { $regex: email, $options: "i" }; // case-insensitive regex
+  }
+  if (name) {
+    filter.name = { $regex: name, $options: "i" }; // partial + case-insensitive
+  }
+
   try {
     const user = await User.find(filter);
-
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: "Failed to find user" });

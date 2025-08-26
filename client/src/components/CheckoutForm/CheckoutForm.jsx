@@ -7,18 +7,16 @@ function CheckoutForm() {
   const { setShowCheckoutForm } = useCheckout();
   const [isChecked, setIsChecked] = useState(true);
   const [searchField, setSearchField] = useState("bookid");
+  const [userField, setUserField] = useState("email");
   const [timestamp, setTimestamp] = useState("");
   const [bookresult, setBookResult] = useState([]);
+  const [userresult, setUserResult] = useState([]);
   const [bookquery, setBookQuery] = useState("");
+  const [userquery, setUserQuery] = useState("");
 
   const [book, setBook] = useState(null);
-  const user = {
-    id: "1234",
-    profile:
-      "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
-    name: "John Doe",
-    email: "john.doe@example.com",
-  };
+  const [user, setUser] = useState(null);
+
   const getTimestamp = (mode = "local") => {
     const now = new Date();
     if (mode === "local") {
@@ -81,10 +79,43 @@ function CheckoutForm() {
 
     fetchData();
   }, [bookquery, searchField]);
+  useEffect(() => {
+    if (userquery.trim() === "") {
+      setUserResult([]);
+      return;
+    }
+    const FetchUser = async () => {
+      try {
+        const res = await api.get("/user", {
+          params: { [userField]: userquery },
+        });
+        setUserResult(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    FetchUser();
+  }, [userField, userquery]);
+
+  const IssueBook = async () => {
+    try {
+      const body = {
+        userid: user._id,
+        bookid: book.bookid,
+        issuedDate: timestamp,
+      };
+
+      const res = await api.post("/books/issue", body);
+
+      console.log("Book issued:", res.data);
+    } catch (error) {
+      console.log("Error issuing book:", error);
+    }
+  };
 
   return (
     <div className="add-form">
-      <form>
+      <form onSubmit={IssueBook}>
         <div className="head">
           <h2>Checkout</h2>
           <IoClose
@@ -152,13 +183,55 @@ function CheckoutForm() {
             <div className="form-group">
               <label htmlFor="user">User</label>
               <div className="option">
-                <select>
-                  <option value="UserEmail">Email</option>
-                  <option value="UserName">Name</option>
+                <select
+                  value={userField}
+                  onChange={(e) => setUserField(e.target.value)}
+                >
+                  <option value="email">Email</option>
+                  <option value="name">Name</option>
                 </select>
-                <input type="text" id="user" name="user" required />
+                <input
+                  type="text"
+                  id="user"
+                  name="user"
+                  onChange={(e) => setUserQuery(e.target.value)}
+                  required
+                />
               </div>
             </div>
+            {userquery !== "" && (
+              <div
+                style={{
+                  position: "fixed",
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                  border: "1px solid #ccc",
+                  marginTop: "10px",
+                  padding: "5px",
+                  width: "40%",
+                  backgroundColor: "white",
+                }}
+              >
+                {userresult.length > 0
+                  ? userresult.map((user) => (
+                      <div
+                        key={user._id}
+                        style={{
+                          padding: "5px",
+                          borderBottom: "1px solid #eee",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setUser(user);
+                          setUserQuery("");
+                        }} // click to set value
+                      >
+                        {user.name} — {user.email}
+                      </div>
+                    ))
+                  : userquery && <div>No results found</div>}
+              </div>
+            )}
             <div className="form-group">
               <label htmlFor="checkout-date">Checkout Date</label>
               <input
@@ -185,34 +258,44 @@ function CheckoutForm() {
           <div className="checkout-2">
             <div className="book">
               <div className="book-1">
-                <img
-                  src={
-                    book !== null
-                      ? book.coverImage
-                      : "https://i.pinimg.com/736x/bf/f0/4d/bff04d61ca0da85861456f44048a14c8.jpg"
-                  }
-                  alt="cover"
-                />
+                {book !== null ? (
+                  <img
+                    src={
+                      book !== null
+                        ? book.coverImage
+                        : "https://i.pinimg.com/736x/bf/f0/4d/bff04d61ca0da85861456f44048a14c8.jpg"
+                    }
+                    alt="cover"
+                  />
+                ) : (
+                  ""
+                )}
               </div>
               <div className="book-2">
-                <h3>{book !== null ? book.title : "No Data"}</h3>
-                <p className="book-id">
-                  {book !== null ? book.bookid : "No Data"}
-                </p>
-                <p className="author">
-                  {book !== null ? book.author : "No Data"}
-                </p>
-                <p className="genre">
-                  {book !== null ? book.genre : "No Data"}
-                </p>
+                <h3>{book !== null ? book.title : ""}</h3>
+                <p className="book-id">{book !== null ? book.bookid : ""}</p>
+                <p className="author">{book !== null ? book.author : ""}</p>
+                <p className="genre">{book !== null ? book.genre : ""}</p>
               </div>
             </div>
             <div className="user">
               <div className="user-1">
-                <img src={user.profile} alt="profile" />
+                {user !== null ? (
+                  <img
+                    src={
+                      user !== null
+                        ? user.profile
+                        : "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"
+                    }
+                    alt="profile"
+                  />
+                ) : (
+                  ""
+                )}
+
                 <div className="user-2">
-                  <p>{user.name}</p>
-                  <p>{user.email}</p>
+                  <p>{user !== null ? user.name : ""}</p>
+                  <p>{user !== null ? user.email : ""}</p>
                 </div>
               </div>
             </div>

@@ -12,15 +12,10 @@ const issuedBookSchema = new mongoose.Schema({
   },
   issuedDate: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
   dueDate: {
     type: Date,
-    default: function () {
-      const date = new Date();
-      date.setDate(date.getDate() + 15); // Default due date is 14 days from the issue date
-      return date;
-    },
     required: true,
   },
 });
