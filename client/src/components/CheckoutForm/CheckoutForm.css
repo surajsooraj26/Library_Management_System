@@ -127,3 +127,48 @@
   justify-content: right;
   margin-top: 20px;
 }
+.notification {
+  position: fixed;
+  top: 80px;
+  right: 40px;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+
+  /* Animation */
+  animation: slideIn 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
+}
+.notification.success {
+  background: #4caf50; /* green */
+}
+
+.notification.error {
+  background: #f44336; /* red */
+}
+
+/* Slide in from the right */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade out after delay */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}

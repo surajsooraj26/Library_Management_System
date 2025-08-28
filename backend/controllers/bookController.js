@@ -1,4 +1,5 @@
 const book = require("../models/book");
+const user = require("../models/user");
 const issuedBook = require("../models/issuedBooks");
 const returnedBook = require("../models/returnedBooks");
 // Add a new book
@@ -78,7 +79,7 @@ const issueBook = async (req, res) => {
     !req.body.userid ||
     !req.body.issuedDate
   ) {
-    return res.status(400).json({ error: "Book ID and User ID are required" });
+    return res.status(400).json({ error: "❎ All Fields are required" });
   }
   const { bookid, userid, issuedDate } = req.body;
   try {
@@ -105,34 +106,63 @@ const issueBook = async (req, res) => {
     await issueRecord.save();
     res
       .status(200)
-      .json({ message: "Book issued successfully", book: bookToIssue });
+      .json({ message: "✅ Book issued successfully", book: bookToIssue });
   } catch (error) {
     res.status(500).json({ error: "Failed to issue book" });
     console.log(error);
   }
 };
+//Get issue record
+const getRecord = async (req, res) => {
+  try {
+    // Choose either body or query
+    const { bookid } = req.query; // or req.body
+    if (!bookid) {
+      return res.status(400).json({ error: "Book ID required" });
+    }
+
+    // Find issued record
+    const issueRecord = await issuedBook.findOne({ bookid });
+    if (!issueRecord) {
+      return res.status(404).json({ error: "Issued book not found" });
+    }
+
+    // Find user by ID
+    const findUser = await user.findById(issueRecord.user);
+    if (!findUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send response
+    return res.status(200).json({
+      issueRecord,
+      user: findUser,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
 
 // Return a book
 const returnBook = async (req, res) => {
-  if (!req.body || !req.body.bookid) {
-    return res.status(400).json({ error: "Book ID  required" });
+  if (!req.body || !req.body.bookid || !req.body.returnDate) {
+    return res.status(400).json({ error: "❌ Book ID and Date required" });
   }
-  if (!req.body.returnDate) {
-    returnDate = new Date(); // Set return date to current date if not provided
-  }
-  const { bookid } = req.body;
+
+  const { bookid, returnDate } = req.body;
 
   try {
     const bookToReturn = await issuedBook.findOne({
       bookid: bookid,
     });
     if (!bookToReturn) {
-      return res.status(404).json({ error: "Issued book not found" });
+      return res.status(404).json({ error: "❌ Issued book not found" });
     }
     // Update the book status to available
     const bookDetails = await book.findOne({ bookid: bookid });
     if (!bookDetails) {
-      return res.status(404).json({ error: "Book details not found" });
+      return res.status(404).json({ error: "❌ Book details not found" });
     }
     bookDetails.status = "available"; // Update status to available
     await bookDetails.save();
@@ -152,10 +182,10 @@ const returnBook = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Book returned successfully",
+      message: "✅ Book returned successfully",
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to return book" });
+    res.status(500).json({ error: "❌ Failed to return book" });
   }
 };
 
@@ -166,4 +196,5 @@ module.exports = {
   deleteBook,
   issueBook,
   returnBook,
+  getRecord,
 };

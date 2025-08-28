@@ -9,6 +9,7 @@ const {
   deleteBook,
   issueBook,
   returnBook,
+  getRecord,
 } = require("../controllers/bookController");
 // Add a new book
 router.post("/", protect, adminOnly, addBook);
@@ -20,6 +21,8 @@ router.put("/:bookid", protect, adminOnly, updateBook);
 router.delete("/:bookid", protect, adminOnly, deleteBook);
 // Issue a book
 router.post("/issue", protect, adminOnly, issueBook);
+// Get issue record
+router.get("/issue", protect, adminOnly, getRecord);
 // Return a book
 router.post("/return", protect, adminOnly, returnBook);
 
