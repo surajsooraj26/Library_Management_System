@@ -26,5 +26,7 @@ app.use("/user", require("./routes/userRoutes"));
 // add more routes as needed
 app.use("/books", require("./routes/bookRoutes"));
 
+app.use("/activities", require("./routes/activityRoutes"));
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
