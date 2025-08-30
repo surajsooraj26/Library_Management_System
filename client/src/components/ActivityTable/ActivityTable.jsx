@@ -48,10 +48,19 @@ function ActivityTable() {
                 <tr key={index}>
                   <td>{activity.userName || "Unknown User"}</td>
                   <td className="action">
-                    {activity.type === "issued"
-                      ? `Issued ${activity.bookTitle || "a book"}`
-                      : `Returned ${activity.bookTitle || "a book"}`}
+                    {activity.type === "issued" ? (
+                      <>
+                        Checked out{" "}
+                        <strong>{activity.bookTitle || "a book"}</strong>
+                      </>
+                    ) : (
+                      <>
+                        Returned{" "}
+                        <strong>{activity.bookTitle || "a book"}</strong>
+                      </>
+                    )}
                   </td>
+
                   <td className="timestamp">
                     {new Date(activity.date).toLocaleString()}
                   </td>
