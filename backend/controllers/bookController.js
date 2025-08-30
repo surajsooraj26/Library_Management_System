@@ -75,20 +75,22 @@ const deleteBook = async (req, res) => {
 const issueBook = async (req, res) => {
   if (
     !req.body ||
-    !req.body.bookid ||
-    !req.body.userid ||
+    !req.body.bookId ||
+    !req.body.userId ||
     !req.body.issuedDate
   ) {
     return res.status(400).json({ error: "❎ All Fields are required" });
   }
-  const { bookid, userid, issuedDate } = req.body;
+  const { bookId, userId, issuedDate } = req.body;
   try {
-    const bookToIssue = await book.findOne({ bookid: bookid });
+    const bookToIssue = await book.findById(req.body.bookId);
     if (!bookToIssue) {
-      return res.status(404).json({ error: "Book not found" });
+      return res.status(404).json({ error: "❎ Book not found" });
     }
     if (bookToIssue.status !== "available") {
-      return res.status(400).json({ error: "Book is not available for issue" });
+      return res
+        .status(400)
+        .json({ error: "❎ Book is not available for issue" });
     }
     bookToIssue.status = "checked out"; // Update status to checked out
     await bookToIssue.save();
@@ -98,17 +100,19 @@ const issueBook = async (req, res) => {
     dueDateObj.setDate(issueDateObj.getDate() + 15); // add 15 days
 
     const issueRecord = new issuedBook({
-      user: userid,
-      bookid: bookid,
+      user: userId,
+      book: bookId,
       issuedDate: issueDateObj,
       dueDate: dueDateObj,
     });
     await issueRecord.save();
+    bookToIssue.status = "checked out"; // Update status to checked out
+    await bookToIssue.save();
     res
       .status(200)
       .json({ message: "✅ Book issued successfully", book: bookToIssue });
   } catch (error) {
-    res.status(500).json({ error: "Failed to issue book" });
+    res.status(500).json({ error: "❎ Failed to issue book" });
     console.log(error);
   }
 };
@@ -116,13 +120,14 @@ const issueBook = async (req, res) => {
 const getRecord = async (req, res) => {
   try {
     // Choose either body or query
-    const { bookid } = req.query; // or req.body
-    if (!bookid) {
+    const { bookId } = req.query; // or req.body
+    if (!bookId) {
       return res.status(400).json({ error: "Book ID required" });
     }
 
     // Find issued record
-    const issueRecord = await issuedBook.findOne({ bookid });
+    const issueRecord = await issuedBook.findOne({ book: bookId });
+    console.log(issueRecord);
     if (!issueRecord) {
       return res.status(404).json({ error: "Issued book not found" });
     }
@@ -146,30 +151,27 @@ const getRecord = async (req, res) => {
 
 // Return a book
 const returnBook = async (req, res) => {
-  if (!req.body || !req.body.bookid || !req.body.returnDate) {
+  if (!req.body || !req.body.bookId || !req.body.returnDate) {
     return res.status(400).json({ error: "❌ Book ID and Date required" });
   }
-
-  const { bookid, returnDate } = req.body;
+  const { bookId, returnDate } = req.body;
 
   try {
     const bookToReturn = await issuedBook.findOne({
-      bookid: bookid,
+      book: bookId,
     });
     if (!bookToReturn) {
       return res.status(404).json({ error: "❌ Issued book not found" });
     }
     // Update the book status to available
-    const bookDetails = await book.findOne({ bookid: bookid });
+    const bookDetails = await book.findById(bookId);
     if (!bookDetails) {
       return res.status(404).json({ error: "❌ Book details not found" });
     }
-    bookDetails.status = "available"; // Update status to available
-    await bookDetails.save();
     // Create a return record
     const returnRecord = new returnedBook({
       user: bookToReturn.user,
-      bookid: bookid,
+      book: bookToReturn.book,
       issuedDate: bookToReturn.issuedDate,
       returnDate: returnDate,
       dueDate: bookToReturn.dueDate,
@@ -177,9 +179,11 @@ const returnBook = async (req, res) => {
     await returnRecord.save();
     // Delete the issued book record
     await issuedBook.deleteOne({
-      bookid: bookToReturn.bookid,
+      book: bookToReturn.book,
       user: bookToReturn.user,
     });
+    bookDetails.status = "available"; // Update status to available
+    await bookDetails.save();
 
     res.status(200).json({
       message: "✅ Book returned successfully",

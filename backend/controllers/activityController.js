@@ -10,16 +10,16 @@ const getActivity = async (req, res) => {
     const issued = await issuedBook
       .find()
       .populate("user", "name") // only name
-      .populate("bookid", "title") // only title
-      .select("user bookid issuedDate createdAt")
+      .populate("book", "title") // only title
+      .select("user book issuedDate createdAt")
       .lean();
 
     // fetch returned activities with user + book populated
     const returned = await returnedBook
       .find()
       .populate("user", "name")
-      .populate("bookid", "title")
-      .select("user bookid returnedDate createdAt")
+      .populate("book", "title")
+      .select("user book returnDate createdAt")
       .lean();
 
     // normalize (extract only user.name + bookid.title)
@@ -27,15 +27,15 @@ const getActivity = async (req, res) => {
       ...issued.map((item) => ({
         type: "issued",
         userName: item.user?.name || "Unknown User",
-        bookTitle: item.bookid?.title || "Unknown Book",
+        bookTitle: item.book?.title || "Unknown Book",
         date: item.issuedDate || item.createdAt,
         createdAt: item.createdAt,
       })),
       ...returned.map((item) => ({
         type: "returned",
         userName: item.user?.name || "Unknown User",
-        bookTitle: item.bookid?.title || "Unknown Book",
-        date: item.returnedDate || item.createdAt,
+        bookTitle: item.book?.title || "Unknown Book",
+        date: item.returnDate || item.createdAt,
         createdAt: item.createdAt,
       })),
     ];

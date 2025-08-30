@@ -43,7 +43,7 @@ function CheckoutForm() {
     } else {
       try {
         const res = await api.get("/books/issue", {
-          params: { bookid: book.bookid },
+          params: { bookId: book._id },
         });
         setUser(res.data.user); // now inside try block
         return res.data; // return the response so caller can use it
@@ -124,8 +124,8 @@ function CheckoutForm() {
     try {
       if (book.status == "available") {
         const body = {
-          userid: user._id,
-          bookid: book.bookid,
+          userId: user._id,
+          bookId: book._id,
           issuedDate: timestamp,
         };
 
@@ -136,7 +136,7 @@ function CheckoutForm() {
         });
       } else {
         const body = {
-          bookid: book.bookid,
+          bookId: book._id,
           returnDate: timestamp,
         };
         const res = await api.post("/books/return", body);
@@ -152,7 +152,7 @@ function CheckoutForm() {
 
       setTimeout(() => setNotification(""), 3000);
     } catch (error) {
-      setNotification({ message: "❎ Error issuing book", type: "error" });
+      setNotification({ message: error.response.data.error, type: "error" });
       setTimeout(() => setNotification(""), 3000);
     }
   };

@@ -6,8 +6,9 @@ const issuedBookSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  bookid: {
-    type: Number,
+  book: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Book",
     required: true,
   },
   issuedDate: {
