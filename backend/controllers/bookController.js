@@ -2,23 +2,50 @@ const book = require("../models/book");
 const user = require("../models/user");
 const issuedBook = require("../models/issuedBooks");
 const returnedBook = require("../models/returnedBooks");
+const cloudinary = require("../config/cloudinary");
+
 // Add a new book
 const addBook = async (req, res) => {
-  const { bookid, title, author, category } = req.body;
-
   try {
+    const {
+      bookid,
+      title,
+      author,
+      genre,
+      price,
+      language,
+      publisher,
+      edition,
+      shelf,
+    } = req.body;
+    let coverUrl = "";
+
+    // Upload image to Cloudinary if file exists
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "library_covers",
+      });
+      coverUrl = result.secure_url;
+    }
+
     const newBook = new book({
       bookid,
       title,
       author,
-      category,
+      genre,
+      price,
+      language,
+      publisher,
+      edition,
+      shelf,
+      coverImage: coverUrl,
       status: "available",
     });
 
     await newBook.save();
-    res.status(201).json(newBook);
+    res.status(200).json({ message: "✅ Book Added Successfully" });
   } catch (error) {
-    res.status(400).json({ message: error });
+    res.status(400).json({ error: "❎ Failed to Add Book" });
   }
 };
 // Get all books

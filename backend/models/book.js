@@ -19,6 +19,9 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  price: {
+    type: Number,
+  },
   description: {
     type: String,
   },
@@ -34,7 +37,13 @@ const bookSchema = new mongoose.Schema({
     enum: ["available", "checked out", "reserved"],
     default: "available",
   },
-  location: {
+  publisher: {
+    type: String,
+  },
+  edition: {
+    type: Number,
+  },
+  shelf: {
     type: String, // e.g., shelf number or section
   },
   coverImage: {

@@ -1,7 +1,9 @@
+const upload = require("../config/multer");
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/auth");
 const adminOnly = require("../middleware/adminOnly");
+
 const {
   addBook,
   getBooks,
@@ -12,7 +14,7 @@ const {
   getRecord,
 } = require("../controllers/bookController");
 // Add a new book
-router.post("/", protect, adminOnly, addBook);
+router.post("/", protect, adminOnly, upload.single("coverImage"), addBook);
 // Get all books
 router.get("/", protect, getBooks);
 // Update a book
