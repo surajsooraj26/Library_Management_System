@@ -154,7 +154,7 @@ const getRecord = async (req, res) => {
 
     // Find issued record
     const issueRecord = await issuedBook.findOne({ book: bookId });
-    console.log(issueRecord);
+
     if (!issueRecord) {
       return res.status(404).json({ error: "Issued book not found" });
     }
