@@ -61,6 +61,7 @@ function AdminBooks() {
                 <th>Title</th>
                 <th>Author</th>
                 <th>Genre</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -69,8 +70,9 @@ function AdminBooks() {
                 <tr key={index}>
                   <td className="title">{book.bookid}</td>
                   <td>{book.title}</td>
-                  <td className="timestamp">{book.author}</td>
-                  <td className="timestamp">{book.genre}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre}</td>
+                  <td>{book.status}</td>
                   <td className="timestamp">
                     <a>Edit</a> | <a>Delete</a>
                   </td>
