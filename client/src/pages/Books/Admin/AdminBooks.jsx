@@ -7,6 +7,7 @@ import api from "../../../services/api";
 
 function AdminBooks() {
   const [bookPage, setBookPage] = useState(1);
+  const [showbookdetails, setShowBookDetails] = useState(false);
   const booksPerPage = 5;
   const { showAddBookForm, setShowAddBookForm } = useAddBook();
   // Sample book data
@@ -27,6 +28,10 @@ function AdminBooks() {
   const startIndex = (bookPage - 1) * booksPerPage;
   const endIndex = startIndex + booksPerPage;
   const currentBooks = books.slice(startIndex, endIndex);
+
+  const bookDetails = (_id) => {
+    console.log("Book details for:", _id);
+  };
 
   return (
     <div className="desktop-container">
@@ -67,7 +72,7 @@ function AdminBooks() {
             </thead>
             <tbody>
               {currentBooks.map((book, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => bookDetails(book._id)}>
                   <td className="title">{book.bookid}</td>
                   <td>{book.title}</td>
                   <td>{book.author}</td>
