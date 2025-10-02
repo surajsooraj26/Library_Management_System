@@ -50,17 +50,32 @@ const addBook = async (req, res) => {
 };
 // Get all books
 const getBooks = async (req, res) => {
-  const { bookid, title, author, category } = req.query;
+  const { search } = req.query;
   const filter = {};
 
-  if (bookid) filter.bookid = bookid;
-  if (title) filter.title = { $regex: title, $options: "i" }; // case-insensitive search
-  if (author) filter.author = { $regex: author, $options: "i" };
-  if (category) filter.category = category;
+  if (search && search.trim() !== "") {
+    const orArray = [];
+
+    // Only add bookid if search is a valid number
+    if (!isNaN(Number(search))) {
+      orArray.push({ bookid: Number(search) });
+    }
+
+    // Add text fields
+    orArray.push(
+      { title: { $regex: search, $options: "i" } },
+      { author: { $regex: search, $options: "i" } },
+      { genre: { $regex: search, $options: "i" } }
+    );
+
+    filter.$or = orArray;
+  }
+
   try {
     const books = await book.find(filter);
     res.status(200).json(books);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch books" });
   }
 };

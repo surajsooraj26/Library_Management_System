@@ -7,6 +7,7 @@ import api from "../../../services/api";
 
 function AdminBooks() {
   const [bookPage, setBookPage] = useState(1);
+  const [searchBook, setSearchBook] = useState("");
   const [showbookdetails, setShowBookDetails] = useState(false);
   const booksPerPage = 5;
   const { showAddBookForm, setShowAddBookForm } = useAddBook();
@@ -15,14 +16,17 @@ function AdminBooks() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await api.get("/books", { withCredentials: true });
+        const response = await api.get("/books", {
+          params: { search: searchBook },
+          withCredentials: true,
+        });
         setBooks(response.data);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
     fetchBooks();
-  }, []);
+  }, [searchBook]);
   // pagination calculation
   const totalPages = Math.ceil(books.length / booksPerPage);
   const startIndex = (bookPage - 1) * booksPerPage;
@@ -49,7 +53,10 @@ function AdminBooks() {
       <form action="">
         <div className="search-box books">
           <FiSearch className="search-icon" />
+
           <input
+            value={searchBook}
+            onChange={(e) => setSearchBook(e.target.value)}
             type="text"
             placeholder="Search for books"
             className="search-input books-input"
