@@ -9,6 +9,8 @@ function AdminBooks() {
   const [bookPage, setBookPage] = useState(1);
   const [searchBook, setSearchBook] = useState("");
   const [showbookdetails, setShowBookDetails] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+
   const booksPerPage = 5;
   const { showAddBookForm, setShowAddBookForm } = useAddBook();
   // Sample book data
@@ -17,21 +19,18 @@ function AdminBooks() {
     const fetchBooks = async () => {
       try {
         const response = await api.get("/books", {
-          params: { search: searchBook },
+          params: { search: searchBook, page: bookPage },
           withCredentials: true,
         });
-        setBooks(response.data);
+        setBooks(response.data.books || []);
+        setTotalPages(response.data.pages || 1);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
     };
     fetchBooks();
-  }, [searchBook]);
+  }, [searchBook, bookPage, showAddBookForm]);
   // pagination calculation
-  const totalPages = Math.ceil(books.length / booksPerPage);
-  const startIndex = (bookPage - 1) * booksPerPage;
-  const endIndex = startIndex + booksPerPage;
-  const currentBooks = books.slice(startIndex, endIndex);
 
   const bookDetails = (_id) => {
     console.log("Book details for:", _id);
@@ -78,7 +77,7 @@ function AdminBooks() {
               </tr>
             </thead>
             <tbody>
-              {currentBooks.map((book, index) => (
+              {books.map((book, index) => (
                 <tr key={index} onClick={() => bookDetails(book._id)}>
                   <td className="title">{book.bookid}</td>
                   <td>{book.title}</td>
@@ -126,6 +125,7 @@ function AdminBooks() {
               e.preventDefault();
               setBookPage((p) => Math.min(totalPages, p + 1));
             }}
+            className={bookPage === totalPages ? "disabled" : ""}
           >
             &raquo;
           </a>

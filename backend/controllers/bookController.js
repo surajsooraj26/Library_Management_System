@@ -50,18 +50,16 @@ const addBook = async (req, res) => {
 };
 // Get all books
 const getBooks = async (req, res) => {
-  const { search } = req.query;
+  const { search, page, limit = 5 } = req.query;
   const filter = {};
 
   if (search && search.trim() !== "") {
     const orArray = [];
 
-    // Only add bookid if search is a valid number
     if (!isNaN(Number(search))) {
       orArray.push({ bookid: Number(search) });
     }
 
-    // Add text fields
     orArray.push(
       { title: { $regex: search, $options: "i" } },
       { author: { $regex: search, $options: "i" } },
@@ -72,8 +70,19 @@ const getBooks = async (req, res) => {
   }
 
   try {
-    const books = await book.find(filter);
-    res.status(200).json(books);
+    const books = await book
+      .find(filter)
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const total = await book.countDocuments(filter);
+
+    res.status(200).json({
+      books,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / limit),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch books" });
